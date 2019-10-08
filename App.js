@@ -3,14 +3,21 @@ import Navigation from './Navigation/Navigation'
 import { Provider } from 'react-redux'
 import Store from './Store/configureStore'
 import { useScreens } from 'react-native-screens';
+import { persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/es/integration/react'
+
 useScreens();
 
 export default class App extends React.Component {
   render() {
-    return (
-        <Provider store={Store}>
-          <Navigation/>
-        </Provider>
+      let persistor = persistStore(Store)
+
+      return (
+          <Provider store={Store}>
+              <PersistGate persistor={persistor}>
+                  <Navigation />
+              </PersistGate>
+          </Provider>
     )
   }
 }

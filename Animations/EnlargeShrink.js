@@ -4,7 +4,7 @@ import { Animated } from 'react-native'
 class EnlargeShrink extends React.Component {
 
     constructor(props) {
-        super(props)
+        super(props);
         this.state = {
             viewSize: new Animated.Value(this._getSize())
         }

@@ -7,8 +7,8 @@ function setAvatar(state = initialState, action) {
             nextState = {
                 ...state,
                 avatar: action.value
-            }
-            return nextState || state
+            };
+            return nextState || state;
         default:
             return state
     }
