@@ -32,6 +32,7 @@ class FilmDetail extends React.Component {
 
         this._toggleFavorite = this._toggleFavorite.bind(this)
         this._shareFilm = this._shareFilm.bind(this)
+        this._toggleFilmsVus=this._toggleFilmsVus.bind(this)
     }
 
     _updateNavigationParams() {
@@ -72,7 +73,10 @@ class FilmDetail extends React.Component {
         const action = { type: "TOGGLE_FAVORITE", value: this.state.film }
         this.props.dispatch(action)
     }
-
+    _toggleFilmsVus() {
+        const action = { type: "TOGGLE_FILMSVUS", value: this.state.film }
+        this.props.dispatch(action)
+    }
     _displayFavoriteImage() {
         var sourceImage = require('../Images/ic_favorite_border.png')
         var shouldEnlarge = false // Par défaut, si le film n'est pas en favoris, on veut qu'au clic sur le bouton, celui-ci s'agrandisse => shouldEnlarge à true
@@ -91,6 +95,13 @@ class FilmDetail extends React.Component {
         )
     }
 
+    _displayTextTitleFilmVu (){
+        var title = "Marquer comme vu";
+        if (this.props.filmsVus.findIndex(item => item.id === this.state.film.id) !== -1) {
+            title = "Non vu";
+        }
+        return title;
+    }
     _displayFilm() {
         const { film } = this.state
         if (film != undefined) {
@@ -119,6 +130,10 @@ class FilmDetail extends React.Component {
                         return company.name;
                     }).join(" / ")}
                     </Text>
+                    <Button
+                        title={this._displayTextTitleFilmVu()}
+                        onPress={() => this._toggleFilmsVus()}
+                    />
                 </ScrollView>
             )
         }
@@ -228,7 +243,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        favoritesFilm: state.toggleFavorite.favoritesFilm
+        favoritesFilm: state.toggleFavorite.favoritesFilm,
+        filmsVus: state.toggleFilmsVus.filmsVus
     }
 }
 

@@ -52,6 +52,9 @@ const FilmsVusStackNavigator = createStackNavigator({
         navigationOptions: {
             title: 'Mes Films Vus'
         }
+    },
+    FilmDetail: {
+        screen: FilmDetail,
     }
 });
 
