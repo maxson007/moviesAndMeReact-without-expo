@@ -1,7 +1,8 @@
 import React from 'react'
-import {StyleSheet, View, Text, Image, TouchableOpacity, Animated, Dimensions} from 'react-native'
+import {StyleSheet, View, Text, Image, TouchableHighlight, Animated, Dimensions, ScrollView} from 'react-native';
 import {getImageFromApi} from '../API/TMDBApi'
 import FadeIn from '../Animations/FadeIn'
+import moment from 'moment'
 
 class FilmVuItem extends React.Component {
 
@@ -9,8 +10,10 @@ class FilmVuItem extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            positionLeft: new Animated.Value(Dimensions.get('window').width)
+            positionLeft: new Animated.Value(Dimensions.get('window').width),
+            isOnLongPress: false
         }
+        this._onLongPressButton=this._onLongPressButton.bind(this)
     }
 
     componentDidMount() {
@@ -22,13 +25,23 @@ class FilmVuItem extends React.Component {
         ).start()
     }
 
+    _onLongPressButton() {
+        this.setState({ isOnLongPress: !this.state.isOnLongPress });
+    }
+
+    _displayTextOnlongPress(film) {
+        if(this.state.isOnLongPress)
+            return (<Text>Sorti le {moment(new Date(film.release_date)).format('DD/MM/YYYY')}</Text>);
+        return (<Text>{film.title}</Text>);
+    }
 
     render() {
         const {film, displayDetailForFilm} = this.props
         return (
             <FadeIn>
-                <TouchableOpacity
-                    onPress={() => displayDetailForFilm(film.id)}>
+                <TouchableHighlight
+                    onPress={() => displayDetailForFilm(film.id)}
+                    onLongPress={this._onLongPressButton} underlayColor="white">
                     <View style={{ flex: 1,flexDirection: 'row' ,justifyContent: 'center', alignItems: 'center' }}>
                         <View style={{ flex: 1}}>
                             <Image
@@ -37,10 +50,10 @@ class FilmVuItem extends React.Component {
                             />
                         </View>
                         <View style={{ flex: 2}}>
-                            <Text>{film.title}</Text>
+                            {this._displayTextOnlongPress(film)}
                         </View>
                     </View>
-                </TouchableOpacity>
+                </TouchableHighlight>
             </FadeIn>
         )
     }
